@@ -1,0 +1,1510 @@
+<div title="&lt;&lt;newTiddler&gt;&gt;" modifier="BidiX" created="200808150844" modified="200808160759" tags="iTW Menu excludeLists excludeSearch" server.page.revision="200808160759" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>//only for generate an &lt;&lt;tag Menu&gt;&gt; item</pre>
+</div>
+<div title="BSD Open Source License" modifier="BidiX" created="200803022111" modified="200808160800" tags="excludeLists basic" server.page.revision="200808160800" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>Copyright (c) 2005-2008, BidiX (http://BidiX.info)
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+*Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. 
+*Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. 
+*Neither the name of BidiX nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
+</div>
+<div title="BidiX" modifier="BidiX" created="200803251654" modified="200808160800" tags="excludeLists basic" server.page.revision="200808160800" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>Contact : [[BidiX @ bidix . info|mailto:BidiX@BidiX.info]]
+URL : [[BidiX.info|http://BidiX.info/]]
+Donation : [[Donation via Paypal|https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&amp;business=BidiX%40bidix%2einfo&amp;item_name=TiddlyWikiHacking%20Donations&amp;item_number=Donations&amp;no_shipping=2&amp;no_note=1&amp;tax=0&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF&amp;charset=UTF%2d8]]</pre>
+</div>
+<div title="Commands" modifier="BidiX" created="200803261444" modified="200808172124" tags="Menu iTW excludeLists excludeSearch" server.page.revision="200808172124" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;&lt;search&gt;&gt;
+
+----
+
+&lt;&lt;newTiddler&gt;&gt;
+
+&lt;&lt;saveChanges&gt;&gt;
+
+&lt;&lt;upload&gt;&gt;
+
+----
+
+ImportTiddlers
+
+[[Sync]]
+
+SideBarOptions
+
+[[Indexes]]
+
+</pre>
+</div>
+<div title="DefaultTiddlers" modifier="BidiX" created="200712012246" modified="200801190950" tags="iTW excludeLists excludeSearch" server.page.revision="200801190950" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>Home</pre>
+</div>
+<div title="GettingStarted" modifier="BidiX" created="200802281151" modified="200808171115" tags="iTW Home excludeLists excludeSearch" server.page.revision="200808171115" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>To get started with this blank TiddlyWiki, you'll need to modify the following tiddlers:
+* SiteTitle &amp; SiteSubtitle: The title and subtitle of the site, as shown above (after saving, they will also appear in the browser title bar)
+* SiteUrl: The home URL of the site (used in the RSSFeed)
+* Set [[Options]] and [[iTWTweaks]]
+* Tiddlers tagged [[Menu]] are displaid in &lt;&lt;tag Menu&gt;&gt;
+* Tiddlers tagged with [[Home]] are displaid in the Home page when the TiddlyWiki is opened.
+
+*For additionnal informations : http://iTW.BidiX.info/
+*iTW is available with a [[BSD Open Source License]] feel free to send comments and suggestions to BidiX</pre>
+</div>
+<div title="HideWhenPlugin" modifier="BidiX" created="200803121603" modified="200808140908" tags="systemConfig excludeLists excludeSearch iTW" server.page.revision="200808140908" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>/***
+|Name:|HideWhenPlugin|
+|Description:|Allows conditional inclusion/exclusion in templates|
+|Version:|3.1 ($Rev: 3919 $)|
+|Date:|$Date: 2008-03-13 02:03:12 +1000 (Thu, 13 Mar 2008) $|
+|Source:|http://mptw.tiddlyspot.com/#HideWhenPlugin|
+|Author:|Simon Baird &lt;simon.baird@gmail.com&gt;|
+|License:|http://mptw.tiddlyspot.com/#TheBSDLicense|
+For use in ViewTemplate and EditTemplate. Example usage:
+{{{&lt;div macro=&quot;showWhenTagged Task&quot;&gt;[[TaskToolbar]]&lt;/div&gt;}}}
+{{{&lt;div macro=&quot;showWhen tiddler.modifier == 'BartSimpson'&quot;&gt;&lt;img src=&quot;bart.gif&quot;/&gt;&lt;/div&gt;}}}
+***/
+//{{{
+
+window.hideWhenLastTest = false;
+
+window.removeElementWhen = function(test,place) {
+	window.hideWhenLastTest = test;
+	if (test) {
+		removeChildren(place);
+		place.parentNode.removeChild(place);
+	}
+};
+
+
+merge(config.macros,{
+
+	hideWhen: { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( eval(paramString), place);
+	}},
+
+	showWhen: { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( !eval(paramString), place);
+	}},
+
+	hideWhenTagged: { handler: function (place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( tiddler.tags.containsAll(params), place);
+	}},
+
+	showWhenTagged: { handler: function (place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( !tiddler.tags.containsAll(params), place);
+	}},
+
+	hideWhenTaggedAny: { handler: function (place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( tiddler.tags.containsAny(params), place);
+	}},
+
+	showWhenTaggedAny: { handler: function (place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( !tiddler.tags.containsAny(params), place);
+	}},
+
+	hideWhenTaggedAll: { handler: function (place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( tiddler.tags.containsAll(params), place);
+	}},
+
+	showWhenTaggedAll: { handler: function (place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( !tiddler.tags.containsAll(params), place);
+	}},
+
+	hideWhenExists: { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( store.tiddlerExists(params[0]) || store.isShadowTiddler(params[0]), place);
+	}},
+
+	showWhenExists: { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( !(store.tiddlerExists(params[0]) || store.isShadowTiddler(params[0])), place);
+	}},
+
+	hideWhenTitleIs: { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( tiddler.title == params[0], place);
+	}},
+
+	showWhenTitleIs: { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( tiddler.title != params[0], place);
+	}},
+
+	'else': { handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		removeElementWhen( !window.hideWhenLastTest, place);
+	}}
+
+});
+
+//}}}
+
+</pre>
+</div>
+<div title="HistoryPlugin" modifier="BidiX" created="200803230835" modified="200808140909" tags="systemConfig iTW excludeLists excludeSearch" server.page.revision="200808140909" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>/***
+|''Name:''|HistoryPlugin|
+|''Description:''|Limits to only one tiddler open. Manages an history stack and provides macro to navigate in this history (&lt;&lt;history&gt;&gt;&lt;&lt;back&gt;&gt;&lt;&lt;forward&gt;&gt;).|
+|''Version:''|1.0.0|
+|''Date:''|2008-03-23|
+|''Source:''|http://tiddlywiki.bidix.info/#HistoryPlugin|
+|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
+|''[[License]]:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
+|''~CoreVersion:''|2.3.0|
+***/
+//{{{
+	Story.prototype.tiddlerHistory = [];
+	Story.prototype.historyCurrentPos = -1;
+	Story.prototype.currentTiddler = null;
+	Story.prototype.maxPos = 11;
+
+	Story.prototype.old_history_displayTiddler = Story.prototype.displayTiddler;
+	Story.prototype.displayTiddler = function(srcElement,title,template,animate,slowly)
+	{
+		title = ((typeof title === &quot;string&quot;) ? title : title.title);
+		//SinglePageMode
+		if (this.currentTiddler) this.closeTiddler(this.currentTiddler);
+		if (template == 2) {
+			//switch to Edit mode : don't manage
+			story.old_history_displayTiddler(null,title,template,animate,slowly);
+			return; 
+		}
+		// if same tiddler no change
+		if (this.tiddlerHistory[this.historyCurrentPos] == title) {
+			this.currentTiddler = title;
+			story.old_history_displayTiddler(null,title,template,animate,slowly);
+			return;
+		}
+		if (this.historyCurrentPos == this.tiddlerHistory.length -1) {
+			// bottom of stack
+	    	this.tiddlerHistory.push(title);
+		   	if (this.tiddlerHistory.length &gt; 11) {
+	                 this.tiddlerHistory.shift();
+	       	} else {
+		    this.historyCurrentPos += 1;
+	            }
+
+		} else {
+			// middle of stack
+		    this.historyCurrentPos += 1;
+			if (this.tiddlerHistory[this.historyCurrentPos] != title) {
+				// path change =&gt; cut history
+				this.tiddlerHistory[this.historyCurrentPos] = title;
+				var a = [];
+				for(var i = 0; i &lt;= this.historyCurrentPos;i++) {
+					a[i] = this.tiddlerHistory[i];
+				}
+				this.tiddlerHistory = a;
+			}
+		}
+		this.currentTiddler = title;
+		story.old_history_displayTiddler(null,title,template,animate,true);
+	        scrollTo(0, 1);
+	}
+
+	Story.prototype.old_history_closeTiddler = Story.prototype.closeTiddler;
+	Story.prototype.closeTiddler = function(title,animate,slowly)
+	{
+		this.currentTiddler = null;
+	    story.old_history_closeTiddler.apply(this,arguments);
+	}
+
+	config.macros.history = {};
+	config.macros.history.action = function(event) {
+	var popup = Popup.create(this);
+		if(popup)
+			{
+	        if (!story.tiddlerHistory.length)
+	            createTiddlyText(popup,&quot;No history&quot;);
+	        else
+	           {
+	           var c = story.tiddlerHistory.length;
+			   for (i=0; i&lt;c;i++ )
+	               {
+					var elmt = createTiddlyElement(popup,&quot;li&quot;);
+				   	var btn = createTiddlyButton(elmt,story.tiddlerHistory[i],story.tiddlerHistory[i],config.macros.history.onClick);
+					btn.setAttribute(&quot;historyPos&quot;,i);
+			       }
+	           }
+	        }
+		Popup.show(popup,false);
+		event.cancelBubble = true;
+		if (event.stopPropagation) event.stopPropagation();
+		return false;
+	}
+	config.macros.history.handler = function(place,macroName,params)
+	{
+		createTiddlyButton(place, 'history', 'history', config.macros.history.action);
+	}
+
+	config.macros.history.onClick = function(ev)
+	{
+		var e = ev ? ev : window.event;
+		var historyPos = this.getAttribute(&quot;historyPos&quot;);
+		story.historyCurrentPos = historyPos -1;
+		story.displayTiddler(null,story.tiddlerHistory[historyPos]);
+		return false;
+	};
+
+	config.macros.back = {};
+	config.macros.back.action = function() {
+	       if (story.historyCurrentPos &gt; 0) {
+				if (story.currentTiddler) story.closeTiddler(story.currentTiddler);
+				story.historyCurrentPos = story.historyCurrentPos -2;
+				story.displayTiddler(null,story.tiddlerHistory[story.historyCurrentPos+1]);
+			} else {
+				//if (story.currentTiddler) story.old_history_displayTiddler(null,story.currentTiddler);
+				};
+		return false;
+	}
+	config.macros.back.handler = function(place,macroName,params)
+	{
+		createTiddlyButton(place, '&lt;', 'back', config.macros.back.action,&quot;backButton&quot;);
+	}
+
+	config.macros.forward = {};
+	config.macros.forward.action = function() {
+	       if (story.historyCurrentPos &lt; story.tiddlerHistory.length -1) {
+				if (story.currentTiddler) story.closeTiddler(story.currentTiddler);
+				//story.historyCurrentPos = story.historyCurrentPos;
+				story.displayTiddler(null,story.tiddlerHistory[story.historyCurrentPos+1]);
+			} else {
+				//if (story.currentTiddler) story.old_history_displayTiddler(null,story.currentTiddler);
+			}
+		return false;
+	}
+	config.macros.forward.handler = function(place,macroName,params)
+	{
+		createTiddlyButton(place, '&gt;', 'forward', config.macros.forward.action, &quot;ibutton&quot;);
+	}
+//}}}</pre>
+</div>
+<div title="Home" modifier="BidiX" created="200712230939" modified="200808172006" tags="iTW excludeLists excludeSearch systemList Menu noTitle" changecount="4">
+<pre>{{homeTitle{Empty iTW - a ~TiddlyWiki for iPhone}}}</pre>
+</div>
+<div title="Indexes" modifier="BidiX" created="200712012213" modified="200803261445" tags="iTW excludeLists excludeSearch Menu" server.page.revision="200803261445" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;&lt;tabs txtMainTab &quot;Timeline&quot; &quot;Timeline&quot; TabTimeline &quot;All&quot; &quot;All tiddlers&quot; TabAll &quot;Tags&quot; &quot;All tags&quot; TabTags &quot;More&quot; &quot;More lists&quot; TabMore&gt;&gt;</pre>
+</div>
+<div title="ListByTag" modifier="BidiX" created="200808140844" modified="200808151113" tags="iTW systemConfig excludeLists excludeSearch" server.page.revision="200808151113" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>//{{{
+/*
+ * ListByTag
+ */
+
+Array.prototype.tiddlerList = function(listFormat,max) {
+		var output = &quot;&quot;;
+		if (!listFormat) 
+			listFormat = &quot;'\\n{{tiddlerListItem{{{tiddlerListItemTitle{[[' + tiddler.title + ']]}}} - ' + tiddler.created.formatString('0DD/0MM/YY') + ' - ' + tiddler.modifier + '\\n{{tiddlerExcerpt{' + text + ' ... \\n}}}}}}'&quot;;        
+		if (!max) 
+			max = this.length;
+		if (this.length &gt; 0 &amp;&amp; this[0] instanceof Tiddler) {
+			for (var i=0;i&lt;max;i++) {
+				var tiddler = this[i];
+				var text = &quot;{{{&quot;+wikifyPlain(tiddler.title, store, 100)+&quot;}}}&quot;;
+				output += eval(listFormat);
+			}
+		}
+		output += &quot;\n----\n&quot;;
+		return output;
+	};
+
+// tag, sorted, listformat, max(0), noReverse(true)
+config.macros.listByTag = {};
+config.macros.listByTag.handler = function(place,macroName,params,wikifier,paramString,tiddler)
+{
+    	params[0]  = (params[0] ? params[0] : tiddler.title);
+    	var tiddlers = store.getTaggedTiddlers(params[0],params[1]);
+    	if (params[3] == 0) params[3] = null;
+    	if (! params[4])
+    	    	tiddlers = tiddlers.reverse();
+ 	wikify(tiddlers.tiddlerList(params[2],params[3]),place,null,tiddler.tiddler);
+
+	var tiddlerElem = document.getElementById(story.idPrefix + tiddler.title);
+	var e = null;
+	if(tiddlerElem != null) {
+		var children = tiddlerElem.getElementsByTagName(&quot;span&quot;);
+		for(var t=0; t&lt;children.length; t++) {
+			var c = children[t];
+			if(c.className == 'tiddlerListItem') {
+				c.addEventListener('mousedown', function(event) {
+					var tiddlyLink = event.currentTarget.firstChild.firstChild;
+					var tiddlerTitle = tiddlyLink.getAttribute(&quot;tiddlyLink&quot;);
+					story.displayTiddler(null, tiddlerTitle);
+					event.preventDefault();
+				}, true);
+			}
+		}
+	}
+	
+};
+//}}}
+
+</pre>
+</div>
+<div title="LoadRemoteFileThroughProxy" modifier="BidiX" created="200703172245" modified="200808181020" tags="systemConfig TiddlyHome excludeLists excludeSearch" server.page.revision="200808181020" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>/***
+|''Name:''|LoadRemoteFileThroughProxy (previous LoadRemoteFileHijack)|
+|''Description:''|When the TiddlyWiki file is located on the web (view over http) the content of [[SiteProxy]] tiddler is added in front of the file url. If [[SiteProxy]] does not exist &quot;/proxy/&quot; is added. |
+|''Version:''|1.1.0|
+|''Date:''|mar 17, 2007|
+|''Source:''|http://tiddlywiki.bidix.info/#LoadRemoteFileHijack|
+|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
+|''License:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
+|''~CoreVersion:''|2.2.0|
+***/
+//{{{
+version.extensions.LoadRemoteFileThroughProxy = {
+ major: 1, minor: 1, revision: 0, 
+ date: new Date(&quot;mar 17, 2007&quot;), 
+ source: &quot;http://tiddlywiki.bidix.info/#LoadRemoteFileThroughProxy&quot;};
+
+if (!window.bidix) window.bidix = {}; // bidix namespace
+if (!bidix.core) bidix.core = {};
+
+bidix.core.loadRemoteFile = loadRemoteFile;
+loadRemoteFile = function(url,callback,params)
+{
+ if ((document.location.toString().substr(0,4) == &quot;http&quot;) &amp;&amp; (url.substr(0,4) == &quot;http&quot;)){ 
+ url = store.getTiddlerText(&quot;SiteProxy&quot;, &quot;/proxy/&quot;) + url;
+ }
+ return bidix.core.loadRemoteFile(url,callback,params);
+}
+//}}}</pre>
+</div>
+<div title="MarkupPreHead" modifier="YourName" created="200808160806" modified="200808250955" tags="iTW excludeLists excludeSearch" server.type="file" server.host="itw.bidix.info/iTWRepository/index.html" server.page.revision="200808250955">
+<pre>&lt;!--{{{--&gt;
+&lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
+&lt;link rel=&quot;shortcut icon&quot; href=&quot;data:;base64,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&quot; type=&quot;image/vnd.microsoft.icon&quot; /&gt;
+&lt;link rel=&quot;icon&quot; href=&quot;data:;base64,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&quot; type=&quot;image/vnd.microsoft.icon&quot; /&gt; 
+&lt;link rel=&quot;apple-touch-icon&quot; href=&quot;data:image/png;base64,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&quot;/&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;&quot;/&gt;
+&lt;!--}}}--&gt;
+
+</pre>
+</div>
+<div title="Menu" modifier="BidiX" created="200803301007" tags="iTW excludeLists excludeSearch systemList" server.page.revision="200803301007" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre></pre>
+</div>
+<div title="Options" modifier="BidiX" created="200712062042" modified="200809031038" tags="iTW excludeLists excludeSearch Menu" server.type="file" server.host="itw.bidix.info/iTWRepository/index.html" server.page.revision="200809031038">
+<pre>!Basic
+These Interface Options for customising TiddlyWiki are saved in your browser
+
+Your username for signing your edits. Write it as a WikiWord (eg JoeBloggs)
+
+UserName: &lt;&lt;option txtUserName&gt;&gt;
+&lt;&lt;option chkAutoSave&gt;&gt; AutoSave
+&lt;&lt;option chkRegExpSearch&gt;&gt; RegExpSearch
+&lt;&lt;option chkCaseSensitiveSearch&gt;&gt; CaseSensitiveSearch
+!Upload
+UploadUserName : &lt;&lt;option txtUploadUserName&gt;&gt;
+UploadPassword : &lt;&lt;option pasUploadPassword&gt;&gt;
+UploadFilename : &lt;&lt;option txtUploadFilename&gt;&gt;
+UploadStoreUrl :&lt;&lt;option txtUploadStoreUrl&gt;&gt;
+UploadDir :&lt;&lt;option txtUploadDir&gt;&gt;
+UploadFilename : &lt;&lt;option txtUploadFilename&gt;&gt;
+UploadBackupDir : &lt;&lt;option txtUploadBackupDir&gt;&gt;
+UploadLog : &lt;&lt;option chkUploadLog&gt;&gt;
+UploadLogMaxLine : &lt;&lt;option txtUploadLogMaxLine&gt;&gt;
+!~UploadTiddler
+UploadTiddler: &lt;&lt;option chkUploadTiddler&gt;&gt;
+UploadTiddlerStoreUrl : &lt;&lt;option txtUploadTiddlerStoreUrl&gt;&gt;
+
+----
+see also AdvancedOptions and [[iTWTweaks]] 
+
+
+</pre>
+</div>
+<div title="Other commands" modifier="BidiX" created="200803261444" modified="200808160839" tags="Menu iTW excludeLists excludeSearch" server.page.revision="200808160839" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;&lt;search&gt;&gt;
+
+----
+
+&lt;&lt;newTiddler&gt;&gt;
+
+&lt;&lt;saveChanges&gt;&gt;
+
+
+----
+
+ImportTiddlers
+
+[[Sync]]
+
+SideBarOptions
+
+[[Indexes]]
+
+</pre>
+</div>
+<div title="PageTemplate" modifier="BidiX" created="200712012249" modified="200801190951" tags="iTW excludeLists excludeSearch" server.page.revision="200801190951" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;!--{{{--&gt;
+&lt;div id='displayArea'&gt;
+&lt;div id='topMenu' refresh='content' tiddler='TopMenu'&gt;&lt;/div&gt;
+&lt;div id='messageArea'&gt;&lt;/div&gt;
+&lt;div id='tiddlerDisplay'&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;!--}}}--&gt;</pre>
+</div>
+<div title="PasswordOptionPlugin" modifier="BidiX" created="200701172059" modified="200808170739" tags="systemConfig upload excludeLists excludeSearch" server.page.revision="200808170739" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>/***
+|''Name:''|PasswordOptionPlugin|
+|''Description:''|Extends TiddlyWiki options with non encrypted password option.|
+|''Version:''|1.0.2|
+|''Date:''|Apr 19, 2007|
+|''Source:''|http://tiddlywiki.bidix.info/#PasswordOptionPlugin|
+|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
+|''License:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
+|''~CoreVersion:''|2.2.0 (Beta 5)|
+***/
+//{{{
+version.extensions.PasswordOptionPlugin = {
+	major: 1, minor: 0, revision: 2, 
+	date: new Date(&quot;Apr 19, 2007&quot;),
+	source: 'http://tiddlywiki.bidix.info/#PasswordOptionPlugin',
+	author: 'BidiX (BidiX (at) bidix (dot) info',
+	license: '[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D]]',
+	coreVersion: '2.2.0 (Beta 5)'
+};
+
+config.macros.option.passwordCheckboxLabel = &quot;Save this password on this computer&quot;;
+config.macros.option.passwordInputType = &quot;password&quot;; // password | text
+setStylesheet(&quot;.pasOptionInput {width: 11em;}\n&quot;,&quot;passwordInputTypeStyle&quot;);
+
+merge(config.macros.option.types, {
+	'pas': {
+		elementType: &quot;input&quot;,
+		valueField: &quot;value&quot;,
+		eventName: &quot;onkeyup&quot;,
+		className: &quot;pasOptionInput&quot;,
+		typeValue: config.macros.option.passwordInputType,
+		create: function(place,type,opt,className,desc) {
+			// password field
+			config.macros.option.genericCreate(place,'pas',opt,className,desc);
+			// checkbox linked with this password &quot;save this password on this computer&quot;
+			config.macros.option.genericCreate(place,'chk','chk'+opt,className,desc);			
+			// text savePasswordCheckboxLabel
+			place.appendChild(document.createTextNode(config.macros.option.passwordCheckboxLabel));
+		},
+		onChange: config.macros.option.genericOnChange
+	}
+});
+
+merge(config.optionHandlers['chk'], {
+	get: function(name) {
+		// is there an option linked with this chk ?
+		var opt = name.substr(3);
+		if (config.options[opt]) 
+			saveOptionCookie(opt);
+		return config.options[name] ? &quot;true&quot; : &quot;false&quot;;
+	}
+});
+
+merge(config.optionHandlers, {
+	'pas': {
+ 		get: function(name) {
+			if (config.options[&quot;chk&quot;+name]) {
+				return encodeCookie(config.options[name].toString());
+			} else {
+				return &quot;&quot;;
+			}
+		},
+		set: function(name,value) {config.options[name] = decodeCookie(value);}
+	}
+});
+
+// need to reload options to load passwordOptions
+loadOptionsCookie();
+
+/*
+if (!config.options['pasPassword'])
+	config.options['pasPassword'] = '';
+
+merge(config.optionsDesc,{
+		pasPassword: &quot;Test password&quot;
+	});
+*/
+//}}}</pre>
+</div>
+<div title="SiteProxy" modifier="BidiX" created="200808181007" modified="200808181020" tags="TiddlyHome excludeLists excludeSearch" server.page.revision="200808181020" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>proxy.php?url=</pre>
+</div>
+<div title="StyleSheet" modifier="BidiX" created="200712061745" modified="200809030925" tags="iTW excludeLists excludeSearch" server.type="file" server.host="itw.bidix.info/iTWRepository/index.html" server.page.revision="200809030925">
+<pre>/*{{{*/
+body {font-size:12px; font-family:arial,helvetica; margin:0; padding:0;	min-height: 418px; width: 100%}
+#messageArea {position:fixed; top:28px; right:0em; margin:0.5em; padding:0.5em; z-index:2000; _position:absolute;}
+#displayArea {margin:0em 0em 0em 0em;}
+#backstageButton {display:none; position:absolute; z-index:175; top:0em; left:0em;}
+
+#topMenu { 
+ positon:relative;
+ padding-top:0.5em;
+ padding-left:0.5em;
+ }
+
+
+#topMenu br {display:none; }
+
+#topMenu {
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAArCAIAAAA2QHWOAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFJJREFUeNpcjjsOgDAMQy3f/2qMzAwMbOwg6pCPSisGy8+2FAXLunE/TgJGmUvl1jkl78Q2Z/f2ceyYevG6n7wxhLr5y52jjx9G747akYxXgAEA9FZw6HEbDVoAAAAASUVORK5CYII=) #6d84a2 repeat-x;
+	box-sizing: border-box;
+	border-bottom: 1px solid #2d3642;	
+	margin: 0;
+	line-height: 20px;
+        height: 30px;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 1px 10px 10px 10px;
+	text-align: center;
+	color: #FFFFFF;
+	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0;
+	text-overflow: ellipsis;
+	box-sizing: border-box;
+	overflow: hidden;
+	white-space: nowrap;
+	
+}
+
+
+.backButton, .ibutton, #topMenu .button, .toolbar .button {
+	top: 6px;
+	-webkit-border-radius: 0;
+	padding: 0 1px 2px 1px;
+	height: 28px;
+	line-height: 28px;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0;
+	text-decoration: none;
+	background: #4A6C9B;
+	border-color: #4A6C9B;
+}
+
+
+ #topMenu .backButton {
+	position: absolute;
+	left: 6px;
+	right: auto;
+	font-size: 20px;
+	-webkit-border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAeCAIAAAA6iHCJAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAtJJREFUeNrEV21P01AYbbtubNExBnXDbYjjZYI4BMdgEANDQoTElw/+Rw0mBs0UiSGaoJFEQEPwjRhFCW/JxrZ2Xdu1fe71bpAhCHzqupPnS5ObPOeec+5zb+lHLxao05HPiwvzr3/++J7N7FFGgaaDLe034+O+wCXyxSKET1u5+Wc98XTK39zeOzjudLmNIoAR2tlaf/Zkqm9gKNI/RBigE9dtb23MJKZj8fvuC16b3WGxsJRxOFfHeQOtH+ZnOI+XRfgEBoLAzz6fjo7ebfD4GYYhMiEdDGRAW6xOt6d7YGzl4xIL/7mgyPL044edkVt19T4EFAJEVQYud+MvOCkHc7MJ3+VrXGOzXrHeZS1s9trjOVj7tiqpONTWBRgD6BVmQFls9iMaSHnx/bu3ffEHgC2gVVqAIojKR3Iw9zLRcjVmtTnA0NydxQDg0IWvq59kYIOeZtWs9gQkagcMcgK/vLjYNXQHcEkas0AcYPdNIPr7Q/0M69B089ofavB5ZVm3OJ2cTwegzAUgxGbSe8tLS52xewjRZGabzAABZt+8mvGHBsiYNF+AAw1cXEBGNUiQqWpAlArM5MSYBXgEOl0NkLcCkxak28MRKbuDMa6KDAwAUnU8HO2Q+N0SJ3OLMCA7V1S9vt7d3tSg5LNV0ACXwOekcGfreVbVVYUqMjOvyPsH71cqkxsZ7NHFJIXBTCMONMAlEryoxAfDucyOmaOpmINyaTowrK23IyDxKbNzUIYoKU3+i37OXpCESvfGCOw11uMMcCkQke4rDlrS1coOSk2VOXftERfKtZsURmLXQUqBVqiUABgrQirc0Xp4Fv4t8kxN8dLkaJQupOVcGnTN0PuQHHlRSG1Eu9tUTLOnxZ5clclsfmK078va7/WN7axomCN2e42Xc/VEIoiiM0KePeM20DTY3M22BZtuhENW1rC/NrI3WVGTmZxSKEr7V4ABAJ+53J1I3nPjAAAAAElFTkSuQmCC) 0 8 0 14;
+	border-width: 0 8px 0 14px;
+}
+
+ #topMenu .backButton .pressed {
+	-webkit-border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAeCAIAAAA6iHCJAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAsJJREFUeNrEV9tP01AYP6eXrZddyoAtDGkRHnwUjdEHEUKCaJyQIT4Y/z9jYgJE0QgENYjRRB+JZIMxCco2iQ4YdO3annM8XAJhgE9t98v30pyTfr/v991a+PzNF3AxdH1v7vV46Xdpe6sM3AKEqqr1D6aSl9T9p2dTny+6OT8zuZTJtrQmREEICqJbBAghhlEtFQtaR/v99FMOY3zuvYW5l9nlvKp1SXKY5XkIGeAeAoIsiHKh8PPD9ASHyTkMvi7MruTy7VqnHIpACAmhxLGLDCDDBKVQPNH2t7zNIUzqjk3DWMost8STohShfql34A0EMVzZqdAs1DuYfvUiqrTK4aazR24DsixfXwfzMxOmDeIx5SB4BLwGw5zSoKrv5deLqtZNAESIAO9Bwz9VB7NT4/F4G8Py3ut/BMc2TrKwMDtp2igshhDGwC/QUI8Y7GyV135tJju0g8Yj/jEglMGBu/czU02xZsjwCPvn/kSDb5/mHMJG5Aj2Uf8TDTbWV5eyqx3qZUIgAX6DTjyWCSpRReGCImkELEPnJDFoYc6gY6gRMBHHjIw9gcTcXzwQNsIIU9r8kxoetYxdQEhDZKADUDBr9rWeq7a5C+mu8N0YGrmFgNZ9pUWRHctogAaHNVksbPQNpgIswsjxmwGdCdSEkLK29uNeahRbe7RL/SvEYw0opEhzsVjs7RuoGRWfswCOjRcjXEBUk62WqftdB8cwHdJzsz8qc45d83wkE8IzmDk7KfO57MDQME9bxOOqRMiWxMCpLBxaOJZczmSGHqSJpWOEPBMAOKZ+/cbto16oMznWls/nHqbHgFO1a4a7W5u+zXEss7rd3dWpmwYHLvgdkJTEam5l5NHjj+/elrcqhgPdYkBzH5KF3rtpB6Edvcb9ZxuI0cT3xcVbd4YiIZHnONe+ThEyTIuOH1aI0sd/AgwAlqkuN/kCJYwAAAAASUVORK5CYII=) 0 8 0 14;
+}
+ #topMenu .ibutton{
+	position: absolute;
+	padding : 0px 7px 2px 6px;
+	right: 6px;
+	-webkit-border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAeCAIAAACqmwlGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAbVJREFUeNqUlEtLw0AUhSfJTRpTk5Za1FAfxS5sBVtfC7tQdOcv8C+6FURx50JBEUGwG0HrA5EqtlRtTNM0d+KtrqyCk8NAmJnzce7AzZW2do8ZY/d31bPjw1rt8aP1zn4qblq2nVkqr0xmc7QFzsOTw4PKxXkuX8xOLxqDZh/gOq1m42l/Z3u2OL+8sg63N9dXN1erG5sDg5aqarKi9AFWCofsiUw2f3q0Z49PKFZquLCwlkyPSrISMkaBfYsO6UrTDTORrpwdgazGreRw0OXsP5FNAgM0w0TOkCMTUCxugQxaFwMmJjIDIvMF6vkWmQlADFAYQAiQ+8IAmQF5SB/RBB72EroBj5TAAxR+A+fAMUQMBQEyR09w3I723hYEyAxM6kkQILPMIgqkHiYcQO0UOeELE45gElA9Ud4cvaTogApAv7qINQw5gCInE0bQ9YRa1fdSSVMuzuTcVoP4fwPIVipMyQroc/mxt5cH33P4X9OADumKDGRjEAPX62TskdF0qnJZfa6/eF6nD9D12Eg6MTtXUlS18eoATbZ60zF0rbxUHNA1+DUqqfnbnk9W13Fo+ynAAB714wGw06ZOAAAAAElFTkSuQmCC) 0 5 0 5;
+	border-width: 0 5px 0 5px;
+}
+
+
+#topMenu .button {
+	position: relative;
+	// height: 28px;
+        padding : 8px 8px 8px 8px;
+        // margin-top: 16px;
+	// line-height: 28px;
+	-webkit-border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAeCAIAAACqmwlGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAbVJREFUeNqUlEtLw0AUhSfJTRpTk5Za1FAfxS5sBVtfC7tQdOcv8C+6FURx50JBEUGwG0HrA5EqtlRtTNM0d+KtrqyCk8NAmJnzce7AzZW2do8ZY/d31bPjw1rt8aP1zn4qblq2nVkqr0xmc7QFzsOTw4PKxXkuX8xOLxqDZh/gOq1m42l/Z3u2OL+8sg63N9dXN1erG5sDg5aqarKi9AFWCofsiUw2f3q0Z49PKFZquLCwlkyPSrISMkaBfYsO6UrTDTORrpwdgazGreRw0OXsP5FNAgM0w0TOkCMTUCxugQxaFwMmJjIDIvMF6vkWmQlADFAYQAiQ+8IAmQF5SB/RBB72EroBj5TAAxR+A+fAMUQMBQEyR09w3I723hYEyAxM6kkQILPMIgqkHiYcQO0UOeELE45gElA9Ud4cvaTogApAv7qINQw5gCInE0bQ9YRa1fdSSVMuzuTcVoP4fwPIVipMyQroc/mxt5cH33P4X9OADumKDGRjEAPX62TskdF0qnJZfa6/eF6nD9D12Eg6MTtXUlS18eoATbZ60zF0rbxUHNA1+DUqqfnbnk9W13Fo+ynAAB714wGw06ZOAAAAAElFTkSuQmCC) 0 5 0 5;
+	border-width: 0 5px 0 5px;
+}
+
+.toolbar .button {
+	position: relative;
+	height: 28px;
+        padding : 8px 8px 8px 8px;
+        margin-top: 16px;
+	line-height: 28px;
+	-webkit-border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAeCAIAAACqmwlGAAACJWlDQ1BJQ0MgUHJvZmlsZQAAeJyVkstrE1EUh7+ZIJFSgsqYhSiMqCAYSx4Ws0yaPkibNtMkJQ+6SWbSJDqZDJNJrOKif4Erd65cCMGdImhdudSF4AOkCzduRHDlg65i08U4ExBC8cCF7xzOPY/fveD7XTVNXQTahm3llubkUrki+/fwIXGaE0xV1a6ZVJQME23/EwLAx6tV09Ql/V7659krxrXd79sz4pfNyfcACFilcgWEECA1HE4AUs3hAiDdsk0bhCYgqc2qBsJdIGQVcikQBkCg4fALIFBz+DUQ6KsNG4Q9IGxoLQPE40Bcq3dVEBPAltZV2yAOgIN2u6OBbwBcVk3LBt874GKpXJGdkXt/IPEMxK/j2OZnGOzAuTfj2IUhBH/B09449mMZARCguxWLAiBM9eHY8mi03wB/AIZPRqPh49HooAjiI/hwRu1Z/b96CcJbOMp3dnZ8eG+7NIkdXQAIw8MElHcg8wru78Cl5xB8ADmgCGIs5h5HQwCmU9lVJbkuR+LR2SOe/P+trffcPqeAaaO2lgWCwDfTVgoud/v5BZe3Wotpl7Xq/IrLd5qpNS/HWsy5fKO6rLhcNzbyXn1dyYx7zXn59e5CflyzUHTZ6uU2XL7ZWfHytfq8N5uhr3k1W3bam58UWVZRSLKOTIQ4UWbB+ZMAgZMgKUuxyPWXu/7z/+pk17dtgFTHvG21Gk1bTpqmXg/JaUOdCcnRcDjOIYF5rvXkqWSvAAABuklEQVQ4jZ2UMWtUQRDHZ3ZnffjuDOrlvEsMHAqCIgQDIqeNCF4hYmGs/AoWksLWKqUWqfwQgmnE6gQRRFIEIrFQEATRUw45TcK9Z97bNzMWp4LPIvsctvz/Zn+zLIOpjgHg7srz/rO3wy8fd5Mt+Lvs/ubc0Xbv0snlpYsAgKmOF2/11zc2a53eocZsY8qWgNEOfx99Tj70zy7Mrz7o4e17jx8+eT9/YbExZWuRseU8MEOSyWiHN1+u3rx23G65c7Onrx9rO7IoCizlIwpk8UBsOD7xev0F/TAznZbzhZY7/1Odlhu8a5O6wwVrwXvmAQB03zShjTK/d/tJoY0IQMMBACXl3If5AIByTiB+N5NQQjypcs6hSqpMyrkvqiip+PChVTyBCkvwK6mQihcOdVLxJNk2p8NAQLJtAgBAE6oEUCH6G0CsEEc0sU3D8zVKJjNUuKSqkvmPoasChiLQsK+hisYZFzfFJyF58UlUnzFXz7c4GYQAnAyudJuY6vjG0tqrN58obiHFaF1ZhL0WaZEOz5yae7TSxV+79f7a043xt9HXPM9KgHH1I9MHLy/Ul+90YbJbQ3z+1E898dPExYV7UAAAAABJRU5ErkJggg==) 0 5 0 5;
+	border-width: 0 5px 0 5px;
+}
+
+#topMenu .txtOptionInput  {
+vertical-align: baseline;
+}
+
+.popup li a {display:block; padding:1em; font-weight:bold; cursor:pointer;}
+.toolbar {height: 34px;}
+.selected .toolbar a {color:#FFF;}
+.selected .toolbar a:hover {color:#FFF;}
+
+
+.tagged { float:left; }
+.tagged li { display:inline; }  
+.tagged { background:transparent  !important; border:0  !important; }
+.tagged .button {color: [[ColorPalette::TiertiaryPale]] !important; }
+.tiddler {padding:0em 1em 0em 1em;}
+
+.tiddlerListItem .tiddlerListItemTitle, .tiddlerListItem  .tiddlerListItemTitle a {
+line-height: 28px;
+    font-size: 1.35em;
+    color: #000;
+    background: #FFF;
+    text-decoration: none;
+}
+
+.tiddlerListItem {
+   display: block;
+   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAUCAYAAAB4d5a9AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1woZERcgh0frmgAAALVJREFUeNrt1TEKAjEQheH/qZWNxd7GSmQX8QpewDN5BS8ggoiVt9nCZkufTXaJCxbirIU41YTAfCSZJLLN0DHiC/GjiKRSUhmNTHIAqFKO7dMQKxlneSVpGY7YPgLnbG4VBT2dSYIuPWgR3l22Dz1o/Sn0qoWvQJON55KmYYikGbAF2qI3YGe7ibonLVD0gDpku4YCOkTSCNgMAXSI7TuwT8VDAQDl/4mkIqF15Nul/6f1TjwAO6BGddCkxQkAAAAASUVORK5CYII=) no-repeat right center;
+   padding-right: 24px;
+   border:0; 
+   border-top:dashed 1px [[ColorPalette::TertiaryDark]];
+}
+
+.tiddlerListItem a, .tiddlerListItem code {
+    font-family: Arial;
+    font-size: 1em;
+    color: #333;
+    background: #FFF;
+    text-decoration: none;
+}
+
+.homeTitle {
+    line-height: 28px;
+    font-family: Arial;
+    font-size: 2em;
+    font-weight: bold;
+    color:[[ColorPalette::SecondaryDark]];
+    background: #FFF;
+    text-decoration: none;
+}
+ 
+/*}}}*/
+/*{{{*/
+@media print {
+   #topMenu {display: none ! important;}
+}
+/*}}}*/</pre>
+</div>
+<div title="Sync" modifier="BidiX" created="200808160838" tags="iTW excludeLists excludeSearch" server.page.revision="200808160838" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;&lt;sync&gt;&gt;</pre>
+</div>
+<div title="TagMenu" modifier="BidiX" created="200808150928" modified="200808151022" tags="systemConfig iTW excludeLists excludeSearch" server.page.revision="200808151022" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>{{{
+// Create a button for a tag with a popup listing all the tiddlers that it tags
+//# title and tooltip arguments are optional
+createTagButton  = function(place,tag,excludeTiddler,title,tooltip)
+{
+	if (tag == &quot;Menu&quot;)
+		var onClick = onClickMenuTag;
+	else
+		var onClick = onClickTag;
+	var btn = createTiddlyButton(place,title||tag,(tooltip||config.views.wikified.tag.tooltip).format([tag]), onClick);
+	btn.setAttribute(&quot;tag&quot;,tag);
+	if(excludeTiddler)
+		btn.setAttribute(&quot;tiddler&quot;,excludeTiddler);
+	return btn;
+}
+
+
+// Event handler for clicking on a tiddler tag
+function onClickMenuTag(ev)
+{
+	var e = ev || window.event;
+	var popup = Popup.create(this);
+	var tag = this.getAttribute(&quot;tag&quot;);
+	var title = this.getAttribute(&quot;tiddler&quot;);
+	if(popup &amp;&amp; tag) {
+		var tagged = store.getTaggedTiddlers(tag);
+		var titles = [];
+		var li,r;
+		for(r=0;r&lt;tagged.length;r++) {
+			if(tagged[r].title != title)
+				titles.push(tagged[r].title);
+		}
+		var lingo = config.views.wikified.tag;
+		if(titles.length &gt; 0) {
+			for(r=0; r&lt;titles.length; r++) {
+				//function(place,title,params,label,prompt,accessKey,newFocus,isJournal)
+				if (titles[r] == &quot;&lt;&lt;newTiddler&gt;&gt;&quot;)
+					config.macros.newTiddler.createNewTiddlerButton(createTiddlyElement(popup,&quot;li&quot;),&quot;New Tiddler &quot;,&quot;&quot;,&quot;New Tiddler&quot;, &quot;create a new tiddler&quot;);
+				else
+					createTiddlyLink(createTiddlyElement(popup,&quot;li&quot;),titles[r],true);
+			}
+			
+		} else {
+			createTiddlyText(createTiddlyElement(popup,&quot;li&quot;,null,&quot;disabled&quot;),lingo.popupNone.format([tag]));
+		}
+	}
+	Popup.show();
+	e.cancelBubble = true;
+	if(e.stopPropagation) e.stopPropagation();
+	return false;
+}
+
+
+}}}</pre>
+</div>
+<div title="TiddlyWiki" modifier="BidiX" created="200712230908" modified="200808160801" tags="excludeLists basic" server.page.revision="200808160801" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>TiddlyWiki is a powerful [[wiki|http://en.wikipedia.org/wiki/Wiki]] in a single html file which possesses all the features needed to manage and to outline personal notes in an efficient way.
+
+No facility is required. You only need to download an empty TiddlyWiki on your desktop to start to use it. It can be stored on USB stick. To send it  just attached it to mail. You can also upload it on web server to publish a whole site.
+
+TiddlyWiki was created by Jeremy Ruston. TiddlyWiki is distributed under a BSD Open Source License (see the source of this page).
+
+For details visit [[www.TiddlyWiki.com|http://www.tiddlywiki.com]].
+
+Current Version: &lt;&lt;version&gt;&gt;
+</pre>
+</div>
+<div title="TopMenu" modifier="BidiX" created="200712062107" modified="200808151023" tags="iTW excludeLists excludeSearch" server.page.revision="200808151023" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;&lt;back&gt;&gt;
+&lt;&lt;tag Menu&gt;&gt;
+&lt;&lt;history&gt;&gt;
+&lt;&lt;forward&gt;&gt;
+&lt;&lt;search&gt;&gt;</pre>
+</div>
+<div title="UploadPlugin" modifier="BidiX" created="200703021728" modified="200808170738" tags="systemConfig upload excludeLists excludeSearch" server.page.revision="200808170738" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>/***
+|''Name:''|UploadPlugin|
+|''Description:''|Save to web a TiddlyWiki|
+|''Version:''|4.1.4|
+|''Date:''|2008-08-11|
+|''Source:''|http://tiddlywiki.bidix.info/#UploadPlugin|
+|''Documentation:''|http://tiddlywiki.bidix.info/#UploadPluginDoc|
+|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
+|''License:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
+|''~CoreVersion:''|2.2.0|
+|''Requires:''|PasswordOptionPlugin|
+***/
+//{{{
+version.extensions.UploadPlugin = {
+	major: 4, minor: 1, revision: 4,
+	date: new Date(&quot;2008-08-11&quot;),
+	source: 'http://tiddlywiki.bidix.info/#UploadPlugin',
+	author: 'BidiX (BidiX (at) bidix (dot) info',
+	coreVersion: '2.2.0'
+};
+
+//
+// Environment
+//
+
+if (!window.bidix) window.bidix = {}; // bidix namespace
+bidix.debugMode = false;	// true to activate both in Plugin and UploadService
+	
+//
+// Upload Macro
+//
+
+config.macros.upload = {
+// default values
+	defaultBackupDir: '',	//no backup
+	defaultStoreScript: &quot;store.php&quot;,
+	defaultToFilename: &quot;index.html&quot;,
+	defaultUploadDir: &quot;.&quot;,
+	authenticateUser: true	// UploadService Authenticate User
+};
+	
+config.macros.upload.label = {
+	promptOption: &quot;Save and Upload this TiddlyWiki with UploadOptions&quot;,
+	promptParamMacro: &quot;Save and Upload this TiddlyWiki in %0&quot;,
+	saveLabel: &quot;save to web&quot;, 
+	saveToDisk: &quot;save to disk&quot;,
+	uploadLabel: &quot;upload&quot;	
+};
+
+config.macros.upload.messages = {
+	noStoreUrl: &quot;No store URL in parmeters or options&quot;,
+	usernameOrPasswordMissing: &quot;Username or password missing&quot;
+};
+
+config.macros.upload.handler = function(place,macroName,params) {
+	if (readOnly)
+		return;
+	var label;
+	if (document.location.toString().substr(0,4) == &quot;http&quot;) 
+		label = this.label.saveLabel;
+	else
+		label = this.label.uploadLabel;
+	var prompt;
+	if (params[0]) {
+		prompt = this.label.promptParamMacro.toString().format([this.destFile(params[0], 
+			(params[1] ? params[1]:bidix.basename(window.location.toString())), params[3])]);
+	} else {
+		prompt = this.label.promptOption;
+	}
+	createTiddlyButton(place, label, prompt, function() {config.macros.upload.action(params);}, null, null, this.accessKey);
+};
+
+config.macros.upload.action = function(params)
+{
+		// for missing macro parameter set value from options
+		if (!params) params = {};
+		var storeUrl = params[0] ? params[0] : config.options.txtUploadStoreUrl;
+		var toFilename = params[1] ? params[1] : config.options.txtUploadFilename;
+		var backupDir = params[2] ? params[2] : config.options.txtUploadBackupDir;
+		var uploadDir = params[3] ? params[3] : config.options.txtUploadDir;
+		var username = params[4] ? params[4] : config.options.txtUploadUserName;
+		var password = config.options.pasUploadPassword; // for security reason no password as macro parameter	
+		// for still missing parameter set default value
+		if ((!storeUrl) &amp;&amp; (document.location.toString().substr(0,4) == &quot;http&quot;)) 
+			storeUrl = bidix.dirname(document.location.toString())+'/'+config.macros.upload.defaultStoreScript;
+		if (storeUrl.substr(0,4) != &quot;http&quot;)
+			storeUrl = bidix.dirname(document.location.toString()) +'/'+ storeUrl;
+		if (!toFilename)
+			toFilename = bidix.basename(window.location.toString());
+		if (!toFilename)
+			toFilename = config.macros.upload.defaultToFilename;
+		if (!uploadDir)
+			uploadDir = config.macros.upload.defaultUploadDir;
+		if (!backupDir)
+			backupDir = config.macros.upload.defaultBackupDir;
+		// report error if still missing
+		if (!storeUrl) {
+			alert(config.macros.upload.messages.noStoreUrl);
+			clearMessage();
+			return false;
+		}
+		if (config.macros.upload.authenticateUser &amp;&amp; (!username || !password)) {
+			alert(config.macros.upload.messages.usernameOrPasswordMissing);
+			clearMessage();
+			return false;
+		}
+		bidix.upload.uploadChanges(false,null,storeUrl, toFilename, uploadDir, backupDir, username, password); 
+		return false; 
+};
+
+config.macros.upload.destFile = function(storeUrl, toFilename, uploadDir) 
+{
+	if (!storeUrl)
+		return null;
+		var dest = bidix.dirname(storeUrl);
+		if (uploadDir &amp;&amp; uploadDir != '.')
+			dest = dest + '/' + uploadDir;
+		dest = dest + '/' + toFilename;
+	return dest;
+};
+
+//
+// uploadOptions Macro
+//
+
+config.macros.uploadOptions = {
+	handler: function(place,macroName,params) {
+		var wizard = new Wizard();
+		wizard.createWizard(place,this.wizardTitle);
+		wizard.addStep(this.step1Title,this.step1Html);
+		var markList = wizard.getElement(&quot;markList&quot;);
+		var listWrapper = document.createElement(&quot;div&quot;);
+		markList.parentNode.insertBefore(listWrapper,markList);
+		wizard.setValue(&quot;listWrapper&quot;,listWrapper);
+		this.refreshOptions(listWrapper,false);
+		var uploadCaption;
+		if (document.location.toString().substr(0,4) == &quot;http&quot;) 
+			uploadCaption = config.macros.upload.label.saveLabel;
+		else
+			uploadCaption = config.macros.upload.label.uploadLabel;
+		
+		wizard.setButtons([
+				{caption: uploadCaption, tooltip: config.macros.upload.label.promptOption, 
+					onClick: config.macros.upload.action},
+				{caption: this.cancelButton, tooltip: this.cancelButtonPrompt, onClick: this.onCancel}
+				
+			]);
+	},
+	options: [
+		&quot;txtUploadUserName&quot;,
+		&quot;pasUploadPassword&quot;,
+		&quot;txtUploadStoreUrl&quot;,
+		&quot;txtUploadDir&quot;,
+		&quot;txtUploadFilename&quot;,
+		&quot;txtUploadBackupDir&quot;,
+		&quot;chkUploadLog&quot;,
+		&quot;txtUploadLogMaxLine&quot;		
+	],
+	refreshOptions: function(listWrapper) {
+		var opts = [];
+		for(i=0; i&lt;this.options.length; i++) {
+			var opt = {};
+			opts.push();
+			opt.option = &quot;&quot;;
+			n = this.options[i];
+			opt.name = n;
+			opt.lowlight = !config.optionsDesc[n];
+			opt.description = opt.lowlight ? this.unknownDescription : config.optionsDesc[n];
+			opts.push(opt);
+		}
+		var listview = ListView.create(listWrapper,opts,this.listViewTemplate);
+		for(n=0; n&lt;opts.length; n++) {
+			var type = opts[n].name.substr(0,3);
+			var h = config.macros.option.types[type];
+			if (h &amp;&amp; h.create) {
+				h.create(opts[n].colElements['option'],type,opts[n].name,opts[n].name,&quot;no&quot;);
+			}
+		}
+		
+	},
+	onCancel: function(e)
+	{
+		backstage.switchTab(null);
+		return false;
+	},
+	
+	wizardTitle: &quot;Upload with options&quot;,
+	step1Title: &quot;These options are saved in cookies in your browser&quot;,
+	step1Html: &quot;&lt;input type='hidden' name='markList'&gt;&lt;/input&gt;&lt;br&gt;&quot;,
+	cancelButton: &quot;Cancel&quot;,
+	cancelButtonPrompt: &quot;Cancel prompt&quot;,
+	listViewTemplate: {
+		columns: [
+			{name: 'Description', field: 'description', title: &quot;Description&quot;, type: 'WikiText'},
+			{name: 'Option', field: 'option', title: &quot;Option&quot;, type: 'String'},
+			{name: 'Name', field: 'name', title: &quot;Name&quot;, type: 'String'}
+			],
+		rowClasses: [
+			{className: 'lowlight', field: 'lowlight'} 
+			]}
+};
+
+//
+// upload functions
+//
+
+if (!bidix.upload) bidix.upload = {};
+
+if (!bidix.upload.messages) bidix.upload.messages = {
+	//from saving
+	invalidFileError: &quot;The original file '%0' does not appear to be a valid TiddlyWiki&quot;,
+	backupSaved: &quot;Backup saved&quot;,
+	backupFailed: &quot;Failed to upload backup file&quot;,
+	rssSaved: &quot;RSS feed uploaded&quot;,
+	rssFailed: &quot;Failed to upload RSS feed file&quot;,
+	emptySaved: &quot;Empty template uploaded&quot;,
+	emptyFailed: &quot;Failed to upload empty template file&quot;,
+	mainSaved: &quot;Main TiddlyWiki file uploaded&quot;,
+	mainFailed: &quot;Failed to upload main TiddlyWiki file. Your changes have not been saved&quot;,
+	//specific upload
+	loadOriginalHttpPostError: &quot;Can't get original file&quot;,
+	aboutToSaveOnHttpPost: 'About to upload on %0 ...',
+	storePhpNotFound: &quot;The store script '%0' was not found.&quot;
+};
+
+bidix.upload.uploadChanges = function(onlyIfDirty,tiddlers,storeUrl,toFilename,uploadDir,backupDir,username,password)
+{
+	var callback = function(status,uploadParams,original,url,xhr) {
+		if (!status) {
+			displayMessage(bidix.upload.messages.loadOriginalHttpPostError);
+			return;
+		}
+		if (bidix.debugMode) 
+			alert(original.substr(0,500)+&quot;\n...&quot;);
+		// Locate the storeArea div's 
+		var posDiv = locateStoreArea(original);
+		if((posDiv[0] == -1) || (posDiv[1] == -1)) {
+			alert(config.messages.invalidFileError.format([localPath]));
+			return;
+		}
+		bidix.upload.uploadRss(uploadParams,original,posDiv);
+	};
+	
+	if(onlyIfDirty &amp;&amp; !store.isDirty())
+		return;
+	clearMessage();
+	// save on localdisk ?
+	if (document.location.toString().substr(0,4) == &quot;file&quot;) {
+		var path = document.location.toString();
+		var localPath = getLocalPath(path);
+		saveChanges();
+	}
+	// get original
+	var uploadParams = new Array(storeUrl,toFilename,uploadDir,backupDir,username,password);
+	var originalPath = document.location.toString();
+	// If url is a directory : add index.html
+	if (originalPath.charAt(originalPath.length-1) == &quot;/&quot;)
+		originalPath = originalPath + &quot;index.html&quot;;
+	var dest = config.macros.upload.destFile(storeUrl,toFilename,uploadDir);
+	var log = new bidix.UploadLog();
+	log.startUpload(storeUrl, dest, uploadDir,  backupDir);
+	displayMessage(bidix.upload.messages.aboutToSaveOnHttpPost.format([dest]));
+	if (bidix.debugMode) 
+		alert(&quot;about to execute Http - GET on &quot;+originalPath);
+	var r = doHttp(&quot;GET&quot;,originalPath,null,null,username,password,callback,uploadParams,null);
+	if (typeof r == &quot;string&quot;)
+		displayMessage(r);
+	return r;
+};
+
+bidix.upload.uploadRss = function(uploadParams,original,posDiv) 
+{
+	var callback = function(status,params,responseText,url,xhr) {
+		if(status) {
+			var destfile = responseText.substring(responseText.indexOf(&quot;destfile:&quot;)+9,responseText.indexOf(&quot;\n&quot;, responseText.indexOf(&quot;destfile:&quot;)));
+			displayMessage(bidix.upload.messages.rssSaved,bidix.dirname(url)+'/'+destfile);
+			bidix.upload.uploadMain(params[0],params[1],params[2]);
+		} else {
+			displayMessage(bidix.upload.messages.rssFailed);			
+		}
+	};
+	// do uploadRss
+	if(config.options.chkGenerateAnRssFeed) {
+		var rssPath = uploadParams[1].substr(0,uploadParams[1].lastIndexOf(&quot;.&quot;)) + &quot;.xml&quot;;
+		var rssUploadParams = new Array(uploadParams[0],rssPath,uploadParams[2],'',uploadParams[4],uploadParams[5]);
+		var rssString = generateRss();
+		// no UnicodeToUTF8 conversion needed when location is &quot;file&quot; !!!
+		if (document.location.toString().substr(0,4) != &quot;file&quot;)
+			rssString = convertUnicodeToUTF8(rssString);	
+		bidix.upload.httpUpload(rssUploadParams,rssString,callback,Array(uploadParams,original,posDiv));
+	} else {
+		bidix.upload.uploadMain(uploadParams,original,posDiv);
+	}
+};
+
+bidix.upload.uploadMain = function(uploadParams,original,posDiv) 
+{
+	var callback = function(status,params,responseText,url,xhr) {
+		var log = new bidix.UploadLog();
+		if(status) {
+			// if backupDir specified
+			if ((params[3]) &amp;&amp; (responseText.indexOf(&quot;backupfile:&quot;) &gt; -1))  {
+				var backupfile = responseText.substring(responseText.indexOf(&quot;backupfile:&quot;)+11,responseText.indexOf(&quot;\n&quot;, responseText.indexOf(&quot;backupfile:&quot;)));
+				displayMessage(bidix.upload.messages.backupSaved,bidix.dirname(url)+'/'+backupfile);
+			}
+			var destfile = responseText.substring(responseText.indexOf(&quot;destfile:&quot;)+9,responseText.indexOf(&quot;\n&quot;, responseText.indexOf(&quot;destfile:&quot;)));
+			displayMessage(bidix.upload.messages.mainSaved,bidix.dirname(url)+'/'+destfile);
+			store.setDirty(false);
+			log.endUpload(&quot;ok&quot;);
+		} else {
+			alert(bidix.upload.messages.mainFailed);
+			displayMessage(bidix.upload.messages.mainFailed);
+			log.endUpload(&quot;failed&quot;);			
+		}
+	};
+	// do uploadMain
+	var revised = bidix.upload.updateOriginal(original,posDiv);
+	bidix.upload.httpUpload(uploadParams,revised,callback,uploadParams);
+};
+
+bidix.upload.httpUpload = function(uploadParams,data,callback,params)
+{
+	var localCallback = function(status,params,responseText,url,xhr) {
+		url = (url.indexOf(&quot;nocache=&quot;) &lt; 0 ? url : url.substring(0,url.indexOf(&quot;nocache=&quot;)-1));
+		if (xhr.status == 404)
+			alert(bidix.upload.messages.storePhpNotFound.format([url]));
+		if ((bidix.debugMode) || (responseText.indexOf(&quot;Debug mode&quot;) &gt;= 0 )) {
+			alert(responseText);
+			if (responseText.indexOf(&quot;Debug mode&quot;) &gt;= 0 )
+				responseText = responseText.substring(responseText.indexOf(&quot;\n\n&quot;)+2);
+		} else if (responseText.charAt(0) != '0') 
+			alert(responseText);
+		if (responseText.charAt(0) != '0')
+			status = null;
+		callback(status,params,responseText,url,xhr);
+	};
+	// do httpUpload
+	var boundary = &quot;---------------------------&quot;+&quot;AaB03x&quot;;	
+	var uploadFormName = &quot;UploadPlugin&quot;;
+	// compose headers data
+	var sheader = &quot;&quot;;
+	sheader += &quot;--&quot; + boundary + &quot;\r\nContent-disposition: form-data; name=\&quot;&quot;;
+	sheader += uploadFormName +&quot;\&quot;\r\n\r\n&quot;;
+	sheader += &quot;backupDir=&quot;+uploadParams[3] +
+				&quot;;user=&quot; + uploadParams[4] +
+				&quot;;password=&quot; + uploadParams[5] +
+				&quot;;uploaddir=&quot; + uploadParams[2];
+	if (bidix.debugMode)
+		sheader += &quot;;debug=1&quot;;
+	sheader += &quot;;;\r\n&quot;; 
+	sheader += &quot;\r\n&quot; + &quot;--&quot; + boundary + &quot;\r\n&quot;;
+	sheader += &quot;Content-disposition: form-data; name=\&quot;userfile\&quot;; filename=\&quot;&quot;+uploadParams[1]+&quot;\&quot;\r\n&quot;;
+	sheader += &quot;Content-Type: text/html;charset=UTF-8&quot; + &quot;\r\n&quot;;
+	sheader += &quot;Content-Length: &quot; + data.length + &quot;\r\n\r\n&quot;;
+	// compose trailer data
+	var strailer = new String();
+	strailer = &quot;\r\n--&quot; + boundary + &quot;--\r\n&quot;;
+	data = sheader + data + strailer;
+	if (bidix.debugMode) alert(&quot;about to execute Http - POST on &quot;+uploadParams[0]+&quot;\n with \n&quot;+data.substr(0,500)+ &quot; ... &quot;);
+	var r = doHttp(&quot;POST&quot;,uploadParams[0],data,&quot;multipart/form-data; ;charset=UTF-8; boundary=&quot;+boundary,uploadParams[4],uploadParams[5],localCallback,params,null);
+	if (typeof r == &quot;string&quot;)
+		displayMessage(r);
+	return r;
+};
+
+// same as Saving's updateOriginal but without convertUnicodeToUTF8 calls
+bidix.upload.updateOriginal = function(original, posDiv)
+{
+	if (!posDiv)
+		posDiv = locateStoreArea(original);
+	if((posDiv[0] == -1) || (posDiv[1] == -1)) {
+		alert(config.messages.invalidFileError.format([localPath]));
+		return;
+	}
+	var revised = original.substr(0,posDiv[0] + startSaveArea.length) + &quot;\n&quot; +
+				store.allTiddlersAsHtml() + &quot;\n&quot; +
+				original.substr(posDiv[1]);
+	var newSiteTitle = getPageTitle().htmlEncode();
+	revised = revised.replaceChunk(&quot;&lt;title&quot;+&quot;&gt;&quot;,&quot;&lt;/title&quot;+&quot;&gt;&quot;,&quot; &quot; + newSiteTitle + &quot; &quot;);
+	revised = updateMarkupBlock(revised,&quot;PRE-HEAD&quot;,&quot;MarkupPreHead&quot;);
+	revised = updateMarkupBlock(revised,&quot;POST-HEAD&quot;,&quot;MarkupPostHead&quot;);
+	revised = updateMarkupBlock(revised,&quot;PRE-BODY&quot;,&quot;MarkupPreBody&quot;);
+	revised = updateMarkupBlock(revised,&quot;POST-SCRIPT&quot;,&quot;MarkupPostBody&quot;);
+	return revised;
+};
+
+//
+// UploadLog
+// 
+// config.options.chkUploadLog :
+//		false : no logging
+//		true : logging
+// config.options.txtUploadLogMaxLine :
+//		-1 : no limit
+//      0 :  no Log lines but UploadLog is still in place
+//		n :  the last n lines are only kept
+//		NaN : no limit (-1)
+
+bidix.UploadLog = function() {
+	if (!config.options.chkUploadLog) 
+		return; // this.tiddler = null
+	this.tiddler = store.getTiddler(&quot;UploadLog&quot;);
+	if (!this.tiddler) {
+		this.tiddler = new Tiddler();
+		this.tiddler.title = &quot;UploadLog&quot;;
+		this.tiddler.text = &quot;| !date | !user | !location | !storeUrl | !uploadDir | !toFilename | !backupdir | !origin |&quot;;
+		this.tiddler.created = new Date();
+		this.tiddler.modifier = config.options.txtUserName;
+		this.tiddler.modified = new Date();
+		store.addTiddler(this.tiddler);
+	}
+	return this;
+};
+
+bidix.UploadLog.prototype.addText = function(text) {
+	if (!this.tiddler)
+		return;
+	// retrieve maxLine when we need it
+	var maxLine = parseInt(config.options.txtUploadLogMaxLine,10);
+	if (isNaN(maxLine))
+		maxLine = -1;
+	// add text
+	if (maxLine != 0) 
+		this.tiddler.text = this.tiddler.text + text;
+	// Trunck to maxLine
+	if (maxLine &gt;= 0) {
+		var textArray = this.tiddler.text.split('\n');
+		if (textArray.length &gt; maxLine + 1)
+			textArray.splice(1,textArray.length-1-maxLine);
+			this.tiddler.text = textArray.join('\n');		
+	}
+	// update tiddler fields
+	this.tiddler.modifier = config.options.txtUserName;
+	this.tiddler.modified = new Date();
+	store.addTiddler(this.tiddler);
+	// refresh and notifiy for immediate update
+	story.refreshTiddler(this.tiddler.title);
+	store.notify(this.tiddler.title, true);
+};
+
+bidix.UploadLog.prototype.startUpload = function(storeUrl, toFilename, uploadDir,  backupDir) {
+	if (!this.tiddler)
+		return;
+	var now = new Date();
+	var text = &quot;\n| &quot;;
+	var filename = bidix.basename(document.location.toString());
+	if (!filename) filename = '/';
+	text += now.formatString(&quot;0DD/0MM/YYYY 0hh:0mm:0ss&quot;) +&quot; | &quot;;
+	text += config.options.txtUserName + &quot; | &quot;;
+	text += &quot;[[&quot;+filename+&quot;|&quot;+location + &quot;]] |&quot;;
+	text += &quot; [[&quot; + bidix.basename(storeUrl) + &quot;|&quot; + storeUrl + &quot;]] | &quot;;
+	text += uploadDir + &quot; | &quot;;
+	text += &quot;[[&quot; + bidix.basename(toFilename) + &quot; | &quot; +toFilename + &quot;]] | &quot;;
+	text += backupDir + &quot; |&quot;;
+	this.addText(text);
+};
+
+bidix.UploadLog.prototype.endUpload = function(status) {
+	if (!this.tiddler)
+		return;
+	this.addText(&quot; &quot;+status+&quot; |&quot;);
+};
+
+//
+// Utilities
+// 
+
+bidix.checkPlugin = function(plugin, major, minor, revision) {
+	var ext = version.extensions[plugin];
+	if (!
+		(ext  &amp;&amp; 
+			((ext.major &gt; major) || 
+			((ext.major == major) &amp;&amp; (ext.minor &gt; minor))  ||
+			((ext.major == major) &amp;&amp; (ext.minor == minor) &amp;&amp; (ext.revision &gt;= revision))))) {
+			// write error in PluginManager
+			if (pluginInfo)
+				pluginInfo.log.push(&quot;Requires &quot; + plugin + &quot; &quot; + major + &quot;.&quot; + minor + &quot;.&quot; + revision);
+			eval(plugin); // generate an error : &quot;Error: ReferenceError: xxxx is not defined&quot;
+	}
+};
+
+bidix.dirname = function(filePath) {
+	if (!filePath) 
+		return;
+	var lastpos;
+	if ((lastpos = filePath.lastIndexOf(&quot;/&quot;)) != -1) {
+		return filePath.substring(0, lastpos);
+	} else {
+		return filePath.substring(0, filePath.lastIndexOf(&quot;\\&quot;));
+	}
+};
+
+bidix.basename = function(filePath) {
+	if (!filePath) 
+		return;
+	var lastpos;
+	if ((lastpos = filePath.lastIndexOf(&quot;#&quot;)) != -1) 
+		filePath = filePath.substring(0, lastpos);
+	if ((lastpos = filePath.lastIndexOf(&quot;/&quot;)) != -1) {
+		return filePath.substring(lastpos + 1);
+	} else
+		return filePath.substring(filePath.lastIndexOf(&quot;\\&quot;)+1);
+};
+
+bidix.initOption = function(name,value) {
+	if (!config.options[name])
+		config.options[name] = value;
+};
+
+//
+// Initializations
+//
+
+// require PasswordOptionPlugin 1.0.1 or better
+bidix.checkPlugin(&quot;PasswordOptionPlugin&quot;, 1, 0, 1);
+
+// styleSheet
+setStylesheet('.txtUploadStoreUrl, .txtUploadBackupDir, .txtUploadDir {width: 22em;}',&quot;uploadPluginStyles&quot;);
+
+//optionsDesc
+merge(config.optionsDesc,{
+	txtUploadStoreUrl: &quot;Url of the UploadService script (default: store.php)&quot;,
+	txtUploadFilename: &quot;Filename of the uploaded file (default: in index.html)&quot;,
+	txtUploadDir: &quot;Relative Directory where to store the file (default: . (downloadService directory))&quot;,
+	txtUploadBackupDir: &quot;Relative Directory where to backup the file. If empty no backup. (default: ''(empty))&quot;,
+	txtUploadUserName: &quot;Upload Username&quot;,
+	pasUploadPassword: &quot;Upload Password&quot;,
+	chkUploadLog: &quot;do Logging in UploadLog (default: true)&quot;,
+	txtUploadLogMaxLine: &quot;Maximum of lines in UploadLog (default: 10)&quot;
+});
+
+// Options Initializations
+bidix.initOption('txtUploadStoreUrl','');
+bidix.initOption('txtUploadFilename','');
+bidix.initOption('txtUploadDir','');
+bidix.initOption('txtUploadBackupDir','');
+bidix.initOption('txtUploadUserName','');
+bidix.initOption('pasUploadPassword','');
+bidix.initOption('chkUploadLog',true);
+bidix.initOption('txtUploadLogMaxLine','10');
+
+
+// Backstage
+merge(config.tasks,{
+	uploadOptions: {text: &quot;upload&quot;, tooltip: &quot;Change UploadOptions and Upload&quot;, content: '&lt;&lt;uploadOptions&gt;&gt;'}
+});
+config.backstageTasks.push(&quot;uploadOptions&quot;);
+
+
+//}}}
+
+</pre>
+</div>
+<div title="UploadTiddlerPlugin" modifier="YourName" created="200802222218" modified="200808190911" tags="systemConfig upload excludeLists excludeSearch" server.type="file" server.host="itw.bidix.info/iTWRepository/index.html" server.page.revision="200808190911">
+<pre>/***
+|''Name:''|UploadTiddlerPlugin|
+|''Description:''|Upload a tiddler and Update a remote TiddlyWiki |
+|''Version:''|1.2.1|
+|''Date:''|2008-08-19|
+|''Source:''|http://tiddlywiki.bidix.info/#UploadTiddlerPlugin|
+|''Usage:''|Uses {{{uploadOptions&gt;&gt;}}}&lt;br&gt;with those UploadTiddler Options : &lt;br&gt;chkUploadTiddler: &lt;&lt;option chkUploadTiddler&gt;&gt;&lt;br&gt;txtUploadTiddlerStoreUrl: &lt;&lt;option txtUploadTiddlerStoreUrl&gt;&gt;|
+|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
+|''[[License]]:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
+|''CoreVersion:''|2.3.0|
+***/
+//{{{
+version.extensions.UploadTiddlerPlugin = {
+	major: 1, minor: 2, revision: 1, 
+	date: new Date(&quot;2008-08-11&quot;),
+	source: 'http://tiddlywiki.bidix.info/#UploadTiddlerPlugin',
+	author: 'BidiX (BidiX (at) bidix (dot) info',
+	coreVersion: '2.3.0'
+};
+
+if (!window.bidix) window.bidix = {}; // bidix namespace
+bidix.debugMode = false;
+bidix.uploadTiddler = {
+	messages: {
+		aboutToSaveTiddler: &quot;About to update tiddler '%0'...&quot;,
+		storeTiddlerNotFound: &quot;Script store tiddler '%0' not found&quot;,
+		tiddlerSaved: &quot;Tiddler '%0' updated in '%1'&quot;
+	},
+	upload: function(title,tiddler,oldTitle) {
+		var callback = function(status,params,responseText,url,xhr) {
+			if (xhr.status == 404) {
+				alert(bidix.uploadTiddler.messages.storeTiddlerNotFound.format([url]));
+				return;
+			}
+			if ((bidix.debugMode) || (responseText.indexOf(&quot;Debug mode&quot;) &gt;= 0 )) {
+				alert(responseText);
+				if (responseText.indexOf(&quot;Debug mode&quot;) &gt;= 0 )
+					responseText = responseText.substring(responseText.indexOf(&quot;\n\n&quot;)+2);
+			} else if (responseText.charAt(0) != '0') 
+				alert(responseText);
+			else 
+				displayMessage(bidix.uploadTiddler.messages.tiddlerSaved.format([params[0], params[1]]));
+				store.setDirty(false);
+			}
+
+		if ((config.options['chkUploadTiddler']) &amp;&amp; (document.location.toString().substr(0,4) == &quot;http&quot;)){
+			displayMessage(bidix.uploadTiddler.messages.aboutToSaveTiddler.format([title]));
+			var ExtTiddler = null;
+			var html = null;
+			if (tiddler) {
+				ExtTiddler = store.getSaver().externalizeTiddler(store,tiddler);
+				html = wikifyStatic(tiddler.text,null,tiddler).htmlEncode();
+			}
+			var form = &quot;title=&quot;+encodeURIComponent(title);
+			form = form + &quot;&amp;tiddler=&quot;+(ExtTiddler?encodeURIComponent(ExtTiddler):'');
+			form = form + &quot;&amp;html=&quot;+(html?encodeURIComponent(html):'');
+			var filename = (config.options['txtUploadFilename']?config.options['txtUploadFilename']:'index.html');
+			form = form +&quot;&amp;oldTitle=&quot;+encodeURIComponent(oldTitle);
+			form = form +&quot;&amp;fileName=&quot;+encodeURIComponent(filename);
+			form = form +&quot;&amp;backupDir=&quot;+encodeURIComponent(config.options['txtUploadBackupDir']);
+			form = form +&quot;&amp;user=&quot;+encodeURIComponent(config.options['txtUploadUserName']);
+			form = form +&quot;&amp;password=&quot;+encodeURIComponent(config.options['pasUploadPassword']);
+			form = form +&quot;&amp;uploadir=&quot;+encodeURIComponent(config.options['txtUploadDir']);
+			form = form +&quot;&amp;debug=&quot;+encodeURIComponent(0);
+			var storeScript = (config.options.txtUploadTiddlerStoreUrl 
+								? config.options.txtUploadTiddlerStoreUrl : 'storeTiddler.php');
+			var r = doHttp(&quot;POST&quot;,storeScript,form+&quot;\n&quot;,'application/x-www-form-urlencoded',
+				config.options['txtUploadUserName'],config.options['pasUploadPassword'],callback,Array(title,filename),null);
+		}
+	}
+}
+TiddlyWiki.prototype.saveTiddler_bidix = TiddlyWiki.prototype.saveTiddler;
+TiddlyWiki.prototype.saveTiddler = function(oldTitle,newTitle,newBody,modifier,modified,tags,fields,clearChangeCount,created) {
+	var tiddler = TiddlyWiki.prototype.saveTiddler_bidix.apply(this,arguments);
+	var title = (newTitle?newTitle:oldTitle);
+	if (oldTitle == title)
+		oldTitle = '';
+	bidix.uploadTiddler.upload(title, tiddler, oldTitle);
+}
+TiddlyWiki.prototype.removeTiddler_bidix =TiddlyWiki.prototype.removeTiddler;
+TiddlyWiki.prototype.removeTiddler = function(title) {
+	TiddlyWiki.prototype.removeTiddler_bidix.apply(this,arguments);
+	bidix.uploadTiddler.upload(title, null);
+}
+
+//
+// Initializations
+//
+
+bidix.initOption = function(name,value) {
+	if (!config.options[name])
+		config.options[name] = value;
+};
+
+// styleSheet
+setStylesheet('.txtUploadTiddlerStoreUrl {width: 22em;}',&quot;uploadTiddlerPluginStyles&quot;);
+
+//optionsDesc
+merge(config.optionsDesc,{
+	txtUploadTiddlerStoreUrl: &quot;Url of the UploadTiddlerService script (default: storeTiddler.php)&quot;,
+	chkUploadTiddler: &quot;Do per Tiddler upload using txtUploadTiddlerStoreUrl (default: false)&quot;
+});
+
+// Options Initializations
+bidix.initOption('txtUploadTiddlerStoreUrl','');
+bidix.initOption('chkUploadTiddler','');
+
+// add options in backstage UploadOptions
+if (config.macros.uploadOptions) {
+	if (config.macros.uploadOptions.options) {
+		config.macros.uploadOptions.options.push(&quot;txtUploadTiddlerStoreUrl&quot;,&quot;chkUploadTiddler&quot;);
+	}
+}
+
+//}}}
+
+</pre>
+</div>
+<div title="ViewTemplate" modifier="BidiX" created="200712110812" modified="200804080458" tags="iTW excludeLists excludeSearch" server.page.revision="200804080458" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>&lt;!--{{{--&gt;
+&lt;div class='toolbar' macro='toolbar +editTiddler &gt; closeTiddler permalink references'&gt;&lt;/div&gt;
+&lt;div macro=&quot;hideWhenTaggedAny noTitle&quot;&gt;
+    &lt;div class='title' macro='view title'&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div macro=&quot;hideWhenTaggedAny systemTool systemList&quot;&gt;
+    &lt;div class='tagged' macro='tags'&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class='tagClear'&gt;&lt;/div&gt;
+&lt;div class='viewer' macro='view text wikified'&gt;&lt;/div&gt;
+&lt;div macro=&quot;showWhenTagged [[systemList]]&quot;&gt;
+&lt;div class='viewer' macro=&quot;listByTag '' modified  ''&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class='tagClear'&gt;&lt;/div&gt;
+&lt;!--}}}--&gt;</pre>
+</div>
+<div title="iTWRepository" modifier="BidiX" created="200808172059" modified="200808172103" tags="iTW excludeLists excludeSearch systemServer" server.page.revision="200808172103" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>|''Type:''|file|
+|''URL:''|http://itw.bidix.info/iTWRepository/index.html|
+|''Workspace:''|(default)|
+
+</pre>
+</div>
+<div title="iTWTweaks" modifier="BidiX" created="200712042115" modified="200808181614" tags="iTW excludeLists excludeSearch systemConfig" server.page.revision="200808181614" server.host="itw.bidix.info/iTWRepository/index.html" server.type="file">
+<pre>//// iTW specific tweaks :
+
+//// This settings always overwrite core defaults or previous cookies,
+//// but they can be changed temporarily using [[Options]] or AdvancedOptions
+//// Edit this to fix your default values for this iTW
+
+//{{{
+
+// UserName : 
+config.options.txtUserName = &quot;YourName&quot;;
+
+// save policy
+config.options.chkAutosave = true;
+config.options.chkSaveBackups = true;
+config.options.txtBackupFolder = &quot;backup&quot;;
+
+// upload policy
+config.options.txtUploadUserName = &quot;YourName&quot;;
+config.options.txtUploadFilename = &quot;index.html&quot;;
+config.options.txtUploadStoreUrl = &quot;http://itw.bidix.info/YourSite/store.php&quot;;
+config.options.txtUploadDir = &quot;.&quot;;
+config.options.txtUploadBackupDir = &quot;backup&quot;;
+config.options.chkUploadLog = true;
+config.options.txtUploadLogMaxLine = 3;
+config.options. chkUploadTiddler = true;
+config.options.txtUploadTiddlerStoreUrl = &quot;storeTiddler.php&quot;;
+
+// Always editable
+config.options.chkHttpReadOnly = false;
+readOnly = false;
+
+// no backstage
+showBackstage = false;
+backstage.init = {};
+//}}}
+////iTW presentation tweaks
+//{{{
+// some label tweaks
+merge(config.views.wikified.tag,{
+ labelNoTags: &quot;&quot;,
+ labelTags: &quot;&quot;});
+config.macros.search.label = &quot;&quot;;
+config.macros.toolbar.moreLabel = &quot;+&quot;;
+
+// some shadow initializations
+merge(config.shadowTiddlers,{
+	SiteTitle: &quot;iTW&quot;,
+	SiteSubtitle: &quot;a TiddlyWiki for iPhone&quot;,
+	SiteUrl: &quot;http:/itw.bidix.info/YourSite&quot;,
+	});
+
+//}}}
+
+</pre>
+</div>

@@ -1,0 +1,5 @@
+	match: "^[\\|因(?:[^\\n]*)[\\|因(?:[fhck]?)$",
+	lookaheadRegExp: /^[\|因([^\n]*)[\|因([fhck]?)$/mg,
+	rowTermRegExp: /([\|因(?:[fhck]?)$\n?)/mg,
+	cellRegExp: /(?:[\|因([^\n\|因*)[\|因)|([\|因[fhck]?$\n?)/mg,
+	cellTermRegExp: /((?:\x20*)[\|因)/mg,
