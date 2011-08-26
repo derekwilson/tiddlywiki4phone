@@ -18,17 +18,25 @@ function ReadFileContents([string] $filename)
 	return [string]::join($lineSeparator, (get-content -path $filename))
 }
 
+function ReplaceFromString([string] $sourceText, [string] $replaceRegex, [string] $replaceText)
+{
+	return [regex]::Replace($sourceText, $replaceRegex, "`$1$lineSeparator$replaceText$lineSeparator`$2", [Text.RegularExpressions.RegExOptions]::Singleline)
+}
+
 function ReplaceFromFile([string] $sourceText, [string] $replaceRegex, [string] $replaceFile)
 {
+	#return ReplaceFromString $sourceText, $replaceRegex, (ReadFileContents $replaceFile)
+
 	$replaceText = ReadFileContents $replaceFile
-	
 	return [regex]::Replace($sourceText, $replaceRegex, "`$1$lineSeparator$replaceText$lineSeparator`$2", [Text.RegularExpressions.RegExOptions]::Singleline)
 }
 
 
-$preHeadFile = ".\PreHead-iTW.txt"
-$storeAreaFile = ".\StoreArea-iTW.txt"
+$iTWpreHeadFile = ".\PreHead-iTW.txt"
+$iTWstoreAreaFile = ".\StoreArea-iTW.txt"
 $tableFormatFile = ".\TableFormat.txt"
+# TODO this should be some kind of collection of files
+$AdditionalStoreAreaFile1 = ".\SaveMessageAutoDismissPlugin.txt"
 
 $preHeadRegex = "(<!--PRE-HEAD-START-->.*?<!--\{\{\{-->).*(<!--\}\}\}-->.*?<!--PRE-HEAD-END-->)"
 $storeAreaRegex = "(<!--POST-SHADOWAREA-->.*?<div\sid=`"storeArea`">)(.*</div>.*?<!--POST-STOREAREA-->)"
@@ -37,12 +45,13 @@ $tableFormatRegex = "(name:\s`"table`",).*(\srowTypes:)"
 # Read sourceFile
 $sourceContents = ReadFileContents $source
 
-
 # Replace pre-head
-$newContents = ReplaceFromFile $sourceContents $preHeadRegex $preHeadFile
+$newContents = ReplaceFromFile $sourceContents $preHeadRegex $iTWpreHeadFile
 
 # Replace storearea
-$newContents = ReplaceFromFile $newContents $storeAreaRegex $storeAreaFile
+$storeAreaContents = ReadFileContents $iTWstoreAreaFile
+$storeAreaContents += ReadFileContents $AdditionalStoreAreaFile1
+$newContents = ReplaceFromString $newContents $storeAreaRegex $storeAreaContents
 
 # Replace table format (so we can use ¦ on devices that don't have a | on the keyboard - ie. Android)
 $newContents = ReplaceFromFile $newContents $tableFormatRegex $tableFormatFile

@@ -1,0 +1,45 @@
+<div title="SaveMessageAutoDismissPlugin" modifier="AAD" created="201108161200" modified="201108161200" tags="systemConfig" server.type="file" server.host="www.tiddlytools.com" server.page.revision="201104081738">
+<pre>/***
+|Name|SaveMessageAutoDismissPlugin|
+|Version|1.0.0|
+|Author|Derek Wilson|
+|~CoreVersion|2.4|
+|Type|plugin|
+|Description|extend core message area with auto dismiss|
+!!!!!Documentation
+&gt;see [[SaveMessageAutoDismissPluginInfo]]
+!!!!!Configuration
+&lt;&lt;&lt;
+&lt;&lt;&lt;
+!!!!!Revisions
+&lt;&lt;&lt;
+2010.08.16 1.0.0 Initial Release
+&lt;&lt;&lt;
+!!!!!Code
+***/
+//{{{
+
+if (!version.extensions.BackupOptionsPlugin) {
+
+    version.extensions.SaveMessageAutoDismissPlugin = {
+        major: 1, minor: 0, revision: 0,
+        date: new Date(2011, 8, 16), 
+        type: 'plugin',
+        source: &quot;http://derekwilson.net&quot;
+    };
+
+    if (version.major &lt; 2) alertAndThrow(&quot;SaveMessageAutoDismissPlugin requires TiddlyWiki 2.4 or newer.&quot;);
+    if (version.major &gt;= 2 &amp;&amp; version.minor &lt; 4) alertAndThrow(&quot;SaveMessageAutoDismissPlugin requires TiddlyWiki 2.4 or newer.&quot;);
+
+    config.commands.saveTiddler.handler = function(event,src,title)
+    {
+	    var newTitle = story.saveTiddler(title,event.shiftKey);
+	    if(newTitle)
+		    story.displayTiddler(null,newTitle);
+        //alert('hello 1 edit');
+        setTimeout(function() {clearMessage()}, 3000);
+	    return false;
+    }
+}
+//}}}</pre>
+</div>
